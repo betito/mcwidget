@@ -1,0 +1,73 @@
+
+body {
+    background-image: url('images/background.jpg');
+	background-repeat:no-repeat;
+	background-position-x:center;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: small;
+    text-align: center;
+    color: #A7AAAB;
+}
+
+input#phoneNumber {
+    font-weight: bold;
+} .aligncenter {
+    text-align: center;
+} .convert {
+    background-image: url('images/botao');
+} .figura {
+    text-align: center;
+    background-image: url('images/mc.png');
+} .desktop {
+    text-align: center;
+    color: #A7AAAB;
+} .balance {
+    text-align: center;
+    color: #000000;
+    font-weight: bolder;
+} .codearea {
+    color: #A7AAAB;
+    text-align: center;
+}
+
+.buttons {
+	text-align: center;
+}
+
+.button {
+    font-weight: bold;
+    color: #FFFFFF;
+    background: url('images/btdefault.png') no-repeat center center;
+    display: block;
+    height: 41px;
+    width: 200px;
+    text-align: center;
+	text-decoration:none;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 20px;
+}
+
+.buttonbt {
+	background: url('images/bt.png') no-repeat center center;
+    font-weight: bold;
+    color: #FFFFFF;
+    display: block;
+    height: 41px;
+    width: 200px;
+    text-align: center;	
+	text-decoration:none;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 20px;
+}
+
+
+.button:hover {
+    background-image: url('images/bt.png');
+	color:#000000;
+}
+
