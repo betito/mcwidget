@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>Mobile Credits</title>
+    </head>
+    <body onLoad ="initialize();">
+        <link rel="stylesheet" href="mobilecredits.css" type="text/css" media="screen" />
+        <script type = "text/javascript" src = "smslib.js">
+        </script>
+        <script type = "text/javascript" src = "jquery.js">
+        </script>
+        <div class="desktop" id="desktop">
+            <div>
+                <img src="images/mc.png"/>
+            </div><h2>Mobile Credits</h2>
+            <div class="balance">
+                You have 2000 points.
+            </div>
+			<div class="buttons">
+            <a href="#" class="button" onClick ="showCodeArea();">Insert Code</a>
+            <a href="#" class="button" onClick ="showRedeem();">Convert points to credits</a>
+			</div>
+        </div>
+        <div class="codearea" id="codearea">
+            <div>
+                <img src="images/mc.png"/>
+            </div>
+            <br/>
+            <a>Insert Code</a>
+            <br/>
+            <textarea id = "message" cols = "15" rows = "3">
+            </textarea>
+            <br/>
+	        <a href="#" class="buttonbt" onClick ="sendSMS();">Send</a>
+        </div>
+        <div class="codearea" id="redeemarea">
+            <br/>
+            <p>
+                Sending Request...
+            </p>
+            <img src='images/loading.gif' />
+            <br/>
+            <a href="#" class="button" onClick ="showDesktop();">Back</a>
+        </div>
+    </body>
+</html>
