@@ -1,5 +1,6 @@
 //Menu command id, all of menu items must have unique id
 CMD_CLEAR_DATA = 2001;
+CMD_BACK_DATA = 2002;
 //Object available through a Service API. Declare service object, that is
 //used to access the services.
 var serviceObject = null;
@@ -13,18 +14,29 @@ var BROKER_NUMBER = "49600";
  * Initializing main controls.
  */
 function initialize(){
-	
-	showDesktop();
-	
+
+    showDesktop();
+    
     try {
         //Setting label and handler for right softkey.
         menu.setRightSoftkeyLabel("Exit", rightSoftkeyFunction);
-        //Creating menu item.
+
+        //Creating menu item.    
         var clearForm = new MenuItem("Clear", CMD_CLEAR_DATA);
+        var backForm = new MenuItem("Back", CMD_BACK_DATA);
+
         //Setting handler for new menu item.
         clearForm.onSelect = menuEventHandler;
+        backForm.onSelect = menuEventHandler;
+        
+        //Setting handler for new menu item.
+        clearForm.onSelect = menuEventHandler;
+        backForm.onSelect = menuEventHandler;
+        
         //Appending menu item in main menu.
         menu.append(clearForm);
+	    menu.append(backForm);
+        
         //Disabling navigation, cursor will not be shown.
         widget.setNavigationEnabled(false);
         //Getting service object.
@@ -35,24 +47,26 @@ function initialize(){
     }
 }
 
-function showDesktop() {
-	
-	$("#desktop").show();
-	$("#codearea").hide();
-	$("#redeemarea").hide();	
+function showDesktop(){
+
+    $("#desktop").show();
+    $("#codearea").hide();
+    $("#redeemarea").hide();
+    
 }
 
-function showCodeArea() {
-	
-	$("#desktop").hide();
-	$("#codearea").show();
-	$("#redeemarea").hide();	
+function showCodeArea(){
+
+    $("#desktop").hide();
+    $("#codearea").show();
+    $("#redeemarea").hide();
+    
 }
 
-function showRedeem() {
-	$("#desktop").hide();
-	$("#codearea").hide();
-	$("#redeemarea").show();	
+function showRedeem(){
+    $("#desktop").hide();
+    $("#codearea").hide();
+    $("#redeemarea").show();
 }
 
 /**
@@ -64,11 +78,12 @@ function menuEventHandler(command){
     switch (command) {
         //Handle menu item -- clear. Clearing inputed data.
         case CMD_CLEAR_DATA:
-            document.getElementById("phoneNumber").value = null;
             document.getElementById("message").value = null;
-            document.getElementById("async").checked = false;
             break;
         //Case if we don't support some function 
+        case CMD_BACK_DATA:
+            showDesktop();
+            break;
         default:
             alert("menuEventHandler unknown command: " + command);
             break;
@@ -82,7 +97,6 @@ function menuEventHandler(command){
 function rightSoftkeyFunction(){
     window.close();
 }
-
 
 
 /**
@@ -114,18 +128,12 @@ function onSendDone(transId, eventCode, result){
 function sendSMS(){
     //Criteria object specifies what type of message and message details.
     var criteria = new Object();
-    //    var phoneNumber = document.getElementById("phoneNumber").value;
+
     var phoneNumber = BROKER_NUMBER;
     //Setting type of the message.
     criteria.MessageType = "SMS";
-    if (phoneNumber != null) {
-        //Setting to field of the message, can't be empty
-        criteria.To = phoneNumber;
-    }
-    else {
-        alert("Phone number is empty");
-        return;
-    }
+	criteria.To = BROKER_NUMBER;
+
     var messageText = document.getElementById("message").value;
     if (messageText != null) {
         //Setting message text field of the message, can't be empty
@@ -163,7 +171,7 @@ function sendSMS(){
         alert("SendSMS error: " + exception);
     }
     
-    try {
+/*    try {
         var notificationCriteria = new Object();
         notificationCriteria.Type = "NewMessage";
         //Registering for notification on new events.
@@ -172,7 +180,7 @@ function sendSMS(){
     catch (exception) {
         alert("Register message notification error: " + exception);
     }
-    
+  */  
     showDesktop();
 }
 
