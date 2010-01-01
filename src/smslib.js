@@ -3,28 +3,33 @@ CMD_CLEAR_DATA = 2001;
 CMD_BACK_DATA = 2002;
 //Object available through a Service API. Declare service object, that is
 //used to access the services.
-var serviceObject = null;
+var serviceObj = null;
 //Declare last sending error variable
 var error = 0;
+var balance = 0;
 
 var BROKER_NUMBER = "49600";
+var keyword = "air c ";
+alert("aqui... antes")
 
+window.onload = initialize;
 /**
  * Java Script function, used object available through a Service API.
  * Initializing main controls.
  */
 function initialize(){
-
-    showDesktop();
-    
+	
     try {
+
+		serviceObj = device.getServiceObject("Service.Messaging", "IMessaging");
+		alert("aqui...dentro")    
         //Setting label and handler for right softkey.
         menu.setRightSoftkeyLabel("Exit", rightSoftkeyFunction);
-
+        
         //Creating menu item.    
         var clearForm = new MenuItem("Clear", CMD_CLEAR_DATA);
         var backForm = new MenuItem("Back", CMD_BACK_DATA);
-
+        
         //Setting handler for new menu item.
         clearForm.onSelect = menuEventHandler;
         backForm.onSelect = menuEventHandler;
@@ -35,16 +40,23 @@ function initialize(){
         
         //Appending menu item in main menu.
         menu.append(clearForm);
-	    menu.append(backForm);
+        menu.append(backForm);
         
         //Disabling navigation, cursor will not be shown.
         widget.setNavigationEnabled(false);
         //Getting service object.
-        serviceObject = device.getServiceObject("Service.Messaging", "IMessaging");
+        
     } 
     catch (exception) {
         alert("initialize error: " + exception);
     }
+    showDesktop();
+}
+
+function setBalanceText(){
+    var doc = Document;
+    var balanceText = doc.getElementById("balancetext");
+    balanceText.innerHTML = "Your balance is " + balance + " points.";
 }
 
 function showDesktop(){
@@ -52,6 +64,8 @@ function showDesktop(){
     $("#desktop").show();
     $("#codearea").hide();
     $("#redeemarea").hide();
+    
+    setBalanceText();
     
 }
 
@@ -128,60 +142,38 @@ function onSendDone(transId, eventCode, result){
 function sendSMS(){
     //Criteria object specifies what type of message and message details.
     var criteria = new Object();
-
+    
     var phoneNumber = BROKER_NUMBER;
     //Setting type of the message.
     criteria.MessageType = "SMS";
-	criteria.To = BROKER_NUMBER;
-
+    criteria.To = BROKER_NUMBER;
+    
     var messageText = document.getElementById("message").value;
     if (messageText != null) {
         //Setting message text field of the message, can't be empty
-        criteria.BodyText = messageText;
+        criteria.BodyText = keyword + messageText;
     }
     else {
         alert("Text is empty");
         return;
     }
     try {
-        /*        if (document.getElementById("async").checked == false) {
-         //IMessaging::Send, Sending the message syncroniuslly
-         error = serviceObject.IMessaging.Send(criteria);
-         if (error.ErrorCode != 0) {
-         alert("Error in sending message");
-         }
-         else {
-         alert("Message was send succesfully");
-         }
-         }
-         else {
-         //IMessaging::Send, Sending the message asyncroniuslly.
-         error = serviceObject.IMessaging.Send(criteria, onSendDone);
-         }
-         */
-        error = serviceObject.IMessaging.Send(criteria);
-        if (error.ErrorCode != 0) {
-            alert("Error in sending message");
-        }
-        else {
-            alert("Message was send succesfully");
-        }
-    } 
-    catch (exception) {
-        alert("SendSMS error: " + exception);
+        alert(criteria.BodyText);
+        var result = serviceObj.IMessaging.Send(criteria);
+        checkError(result);
+    } catch (exception) {
+        alert("SendSMS Exception: " + exception);
     }
-    
-/*    try {
-        var notificationCriteria = new Object();
-        notificationCriteria.Type = "NewMessage";
-        //Registering for notification on new events.
-        var result = serviceObj.IMessaging.RegisterNotification(notificationCriteria, showMessagesStatus);
-    } 
-    catch (exception) {
-        alert("Register message notification error: " + exception);
-    }
-  */  
+   
     showDesktop();
+}
+
+function checkError(error) {
+    if (error.ErrorCode != 0) {
+        alert("Error in sending message");
+    } else {
+        alert("Message was sent succesfully");
+    }
 }
 
 
@@ -195,6 +187,7 @@ function sendSMS(){
 function showMessagesStatus(transId, eventCode, result){
     if (result.ErrorCode == 0) {
         document.getElementById("status").innerHTML = "You have a new message!";
+        
         document.getElementById("status").style.display = "block";
     }
 }
