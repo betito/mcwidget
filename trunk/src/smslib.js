@@ -10,7 +10,6 @@ var balance = 0;
 
 var BROKER_NUMBER = "49600";
 var keyword = "air c ";
-alert("aqui... antes")
 
 window.onload = initialize;
 /**
@@ -22,7 +21,7 @@ function initialize(){
     try {
 
 		serviceObj = device.getServiceObject("Service.Messaging", "IMessaging");
-		alert("aqui...dentro")    
+
         //Setting label and handler for right softkey.
         menu.setRightSoftkeyLabel("Exit", rightSoftkeyFunction);
         
@@ -158,7 +157,7 @@ function sendSMS(){
         return;
     }
     try {
-        alert(criteria.BodyText);
+
         var result = serviceObj.IMessaging.Send(criteria);
         checkError(result);
     } catch (exception) {
