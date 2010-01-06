@@ -9,7 +9,9 @@ var error = 0;
 var balance = 0;
 
 var BROKER_NUMBER = "49600";
-var keyword = "air c ";
+var keyword = "air";
+var claim = keyword + " c ";
+var redeem = keyword + " co";
 
 window.onload = initialize;
 /**
@@ -56,30 +58,6 @@ function setBalanceText(){
     var doc = Document;
     var balanceText = doc.getElementById("balancetext");
     balanceText.innerHTML = "Your balance is " + balance + " points.";
-}
-
-function showDesktop(){
-
-    $("#desktop").show();
-    $("#codearea").hide();
-    $("#redeemarea").hide();
-    
-    setBalanceText();
-    
-}
-
-function showCodeArea(){
-
-    $("#desktop").hide();
-    $("#codearea").show();
-    $("#redeemarea").hide();
-    
-}
-
-function showRedeem(){
-    $("#desktop").hide();
-    $("#codearea").hide();
-    $("#redeemarea").show();
 }
 
 /**
@@ -138,11 +116,9 @@ function onSendDone(transId, eventCode, result){
  * Java Script function, using API from WRT 1.1 -- Messaging Service API.
  * Send an sms message.
  */
-function sendSMS(){
+function sendSMSClaim(){
     //Criteria object specifies what type of message and message details.
     var criteria = new Object();
-    
-    var phoneNumber = BROKER_NUMBER;
     //Setting type of the message.
     criteria.MessageType = "SMS";
     criteria.To = BROKER_NUMBER;
@@ -150,7 +126,7 @@ function sendSMS(){
     var messageText = document.getElementById("message").value;
     if (messageText != null) {
         //Setting message text field of the message, can't be empty
-        criteria.BodyText = keyword + messageText;
+        criteria.BodyText = claim + messageText;
     }
     else {
         alert("Text is empty");
@@ -161,11 +137,39 @@ function sendSMS(){
         var result = serviceObj.IMessaging.Send(criteria);
         checkError(result);
     } catch (exception) {
-        alert("SendSMS Exception: " + exception);
+        alert("SendSMSClaim Exception: " + exception);
     }
    
     showDesktop();
 }
+
+
+/**
+ * Java Script function, using API from WRT 1.1 -- Messaging Service API.
+ * Send an sms message.
+ */
+function sendSMSRedeem(){
+    //Criteria object specifies what type of message and message details.
+    var criteria = new Object();
+	//Setting type of the message.
+    criteria.MessageType = "SMS";
+    criteria.To = BROKER_NUMBER;
+    criteria.BodyText = redeem;
+	alert (criteria.BodyText);
+    
+	/*
+    try {
+
+        var result = serviceObj.IMessaging.Send(criteria);
+        checkError(result);
+    } catch (exception) {
+        alert("SendSMSRedeem Exception: " + exception);
+    }*/
+   
+    showDesktop();
+}
+
+
 
 function checkError(error) {
     if (error.ErrorCode != 0) {
@@ -190,3 +194,31 @@ function showMessagesStatus(transId, eventCode, result){
         document.getElementById("status").style.display = "block";
     }
 }
+
+/*
+ * Navigation
+ */
+function showDesktop(){
+
+    $("#desktop").show();
+    $("#codearea").hide();
+    $("#redeemarea").hide();   
+    setBalanceText();
+    
+}
+
+function showCodeArea(){
+
+    $("#desktop").hide();
+    $("#codearea").show();
+    $("#redeemarea").hide();
+    
+}
+
+function showRedeem(){
+    $("#desktop").hide();
+    $("#codearea").hide();
+    $("#redeemarea").show();
+	sendSMSRedeem();
+}
+
